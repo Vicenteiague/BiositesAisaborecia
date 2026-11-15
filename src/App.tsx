@@ -17,6 +17,8 @@ import {
   X,
   Sparkles,
   Clock,
+  Flame,
+  MessageCircle,
 } from 'lucide-react';
 import {
   STORE_CONFIG,
@@ -658,55 +660,75 @@ export default function App() {
     <div className="min-h-screen bg-[#efe6dc] text-[#261c16] flex justify-center">
       {/* Main Mobile-First Container (BiositesAi Template with Cardápio Magnético Colors & Data) */}
       <main className="w-full max-w-[480px] bg-[#fcfaf7] min-h-screen shadow-2xl overflow-x-hidden relative pb-28">
-        {/* 1. HERO / CABEÇALHO COM FOTO DE FUNDO E ONDA */}
-        <header className="relative bg-[#140a05] text-white overflow-hidden">
-          {/* Background Splash Image */}
-          <div className="absolute inset-0">
-            <SafeImage
-              src={IMAGES.heroSplash}
-              alt="Sabor & Cia - Pizzas e Lanches"
-              className="w-full h-full object-cover object-center opacity-80 scale-105"
+        {/* 1. HERO / CABEÇALHO COM VÍDEO DE FUNDO (HERO BURGER) */}
+        <header className="relative w-full min-h-[540px] flex flex-col justify-between overflow-hidden bg-zinc-950 text-white shadow-2xl">
+          {/* Vídeo de Fundo */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster={IMAGES.lancheBurger}
+            className="absolute inset-0 w-full h-full object-cover scale-105"
+          >
+            <source
+              src="/assets/aistudio/89154013_1794775977527166_ae9014a5.mp4"
+              type="video/mp4"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[#1f0e06]/80 to-[#2b1207]/95" />
+          </video>
+
+          {/* Overlay Escuro + Gradiente de Transição na Base */}
+          <div className="absolute inset-0 bg-black/45 backdrop-blur-[1px]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-black/30" />
+
+          {/* Topo: Status de Funcionamento e Avaliação */}
+          <div className="relative z-10 flex items-center justify-between p-5">
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/85 border border-zinc-800 backdrop-blur-md">
+              <Clock className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="text-xs font-semibold text-emerald-400 tracking-wide uppercase">
+                Aberto Agora
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-zinc-900/85 border border-zinc-800 backdrop-blur-md text-xs font-semibold text-amber-400 tabular-nums">
+              <Star className="w-3.5 h-3.5 fill-amber-400" />
+              <span>{STORE_CONFIG.rating}</span>
+            </div>
           </div>
 
-          <div className="relative z-10 pt-9 pb-16 px-6 text-center flex flex-col items-center">
-            {/* Circular Store Logo with Warm Orange-Amber Halo Ring */}
-            <div className="w-28 h-28 rounded-full p-2 bg-[#f96b1f]/40 backdrop-blur-md border-2 border-[#ff9f3d]/70 shadow-2xl mb-3.5 flex items-center justify-center">
+          {/* Centro/Base: Identidade da Hamburgueria & Pizzaria e CTA */}
+          <div className="relative z-10 px-6 pb-10 pt-8 flex flex-col items-center text-center">
+            {/* Logo */}
+            <div className="w-20 h-20 rounded-2xl bg-zinc-900 border-2 border-amber-500/80 p-1 shadow-lg shadow-amber-500/20 mb-4 overflow-hidden">
               <SafeImage
                 src={IMAGES.logo}
-                fallbackSrc={IMAGES.pizzaArtesanal}
-                alt="Logo de Sabor & Cia"
-                className="w-full h-full object-cover rounded-full border-2 border-white/85"
+                fallbackSrc={IMAGES.lancheBurger}
+                alt={`Logo ${STORE_CONFIG.name}`}
+                className="w-full h-full object-cover rounded-xl"
               />
             </div>
 
-            <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#ffb347] mb-1">
-              {STORE_CONFIG.brandSubtitle}
-            </span>
-
-            <h1 className="text-[28px] font-extrabold tracking-tight text-white leading-tight">
-              {STORE_CONFIG.name}
-            </h1>
-
-            <p className="text-[13.5px] text-white/90 mt-2 max-w-[330px] leading-relaxed font-normal">
-              <b className="text-[#ff9f3d]">{STORE_CONFIG.headline}</b>{' '}
-              {STORE_CONFIG.slogan}
-            </p>
-
-            {/* Especialidades */}
-            <div className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-[11px] tracking-[0.14em] uppercase text-white/95 mt-4 font-semibold">
-              <span>PIZZAS</span>
-              <span className="text-[#f96b1f]">•</span>
-              <span>LANCHES</span>
-              <span className="text-[#f96b1f]">•</span>
-              <span>BEBIDAS</span>
-              <span className="text-[#f96b1f]">•</span>
-              <span>SOBREMESAS</span>
+            {/* Badge de Especialidade */}
+            <div className="inline-flex items-center gap-1.5 text-amber-400 text-xs font-bold tracking-wider uppercase mb-2">
+              <Flame className="w-4 h-4 fill-amber-500 text-amber-500" />
+              <span>Burgers na Chapa & Pizzas Artesanais</span>
             </div>
 
-            {/* Cidade & Horário Pill */}
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+            {/* Título e Subtítulo */}
+            <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2 drop-shadow-md">
+              {STORE_CONFIG.name}
+            </h1>
+            <p className="text-sm text-zinc-200 max-w-xs mb-5 leading-relaxed">
+              Blend suculento com queijo cheddar derretido no vapor, pão brioche selado na manteiga e pizzas artesanais quentinhas.
+            </p>
+
+            {/* Informações Rápidas (Tempo e Local) */}
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-zinc-300 mb-6">
+              <span className="flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-amber-500" />
+                {STORE_CONFIG.averageDeliveryTime}
+              </span>
+              <span>•</span>
               <button
                 type="button"
                 onClick={() =>
@@ -714,19 +736,25 @@ export default function App() {
                     .getElementById('onde-estamos')
                     ?.scrollIntoView({ behavior: 'smooth' })
                 }
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-xs text-white font-medium transition cursor-pointer"
+                className="flex items-center gap-1 hover:text-amber-400 transition cursor-pointer"
               >
-                <MapPin className="w-3.5 h-3.5 text-[#ff9f3d]" />
-                <span>
-                  {STORE_CONFIG.city} • {STORE_CONFIG.address}
-                </span>
+                <MapPin className="w-3.5 h-3.5 text-amber-500" />
+                {STORE_CONFIG.city} • Delivery & Retirada
               </button>
-
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[#25b06b]/25 border border-[#25b06b]/50 text-xs text-emerald-200 font-semibold">
-                <Clock className="w-3.5 h-3.5 text-[#31e679]" />
-                <span>Aberto • {STORE_CONFIG.averageDeliveryTime}</span>
-              </span>
             </div>
+
+            {/* Botão Principal de Pedido */}
+            <a
+              href={`https://wa.me/${STORE_CONFIG.whatsappNumber}?text=${encodeURIComponent(
+                'Olá! Vim pelo Biosite do Sabor & Cia e quero fazer um pedido 🍔🍕'
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-zinc-950 font-extrabold text-base shadow-xl shadow-orange-600/30 flex items-center justify-center gap-2.5 transition-all duration-200 active:scale-[0.98]"
+            >
+              <MessageCircle className="w-5 h-5 fill-zinc-950 stroke-zinc-950 transition-transform group-hover:scale-110" />
+              <span>FAZER PEDIDO AGORA</span>
+            </a>
           </div>
 
           {/* Wave Separator at the bottom of the Hero */}
@@ -735,7 +763,7 @@ export default function App() {
               viewBox="0 0 1440 120"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="w-full h-10 preserve-3d"
+              className="w-full h-9 preserve-3d"
               preserveAspectRatio="none"
             >
               <path
