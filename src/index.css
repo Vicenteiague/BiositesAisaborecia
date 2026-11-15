@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: 30 30% 98%;
+    --foreground: 24 25% 12%;
+    --primary: 22 95% 55%;
+    --primary-glow: 32 100% 62%;
+    --primary-deep: 14 85% 45%;
+    --secondary: 8 85% 62%;
+    --accent: 42 100% 58%;
+    --success: 152 65% 42%;
+  }
+
+  body {
+    font-family: 'Manrope', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: 'Sora', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+}
+
+.bg-gradient-brand {
+  background-image: linear-gradient(135deg, hsl(22 95% 55%) 0%, hsl(32 100% 62%) 50%, hsl(8 85% 62%) 100%);
+}
+
+.text-gradient-brand {
+  background-image: linear-gradient(135deg, hsl(22 95% 50%) 0%, hsl(32 100% 55%) 50%, hsl(8 85% 60%) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.shadow-brand-glow {
+  box-shadow: 0 16px 40px -10px hsl(22 95% 55% / 0.38);
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 22s linear infinite;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
