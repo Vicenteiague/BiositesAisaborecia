@@ -44,6 +44,20 @@ export interface CategoryItem {
   isGridIcon?: boolean;
 }
 
+export interface ProductVideoItem {
+  id: string;
+  platform: 'shorts' | 'reels';
+  title: string;
+  subtitle: string;
+  handle: string;
+  likes: number;
+  productId: string;
+  price: number;
+  thumbImg: string;
+  videoSrc: string;
+  externalUrl: string;
+}
+
 export const IMAGES = {
   logo: logoSaborCiaImg,
   heroSplash: heroPizzaBurgerImg,
@@ -481,4 +495,84 @@ export const STORE_CONFIG = {
         'Estamos na Av. Brasil, 2300 em Ponta Porã/MS. Aceitamos Pix (Chave: 67993174612), Cartão de Crédito, Cartão de Débito e Dinheiro (levamos troco se precisar!).',
     },
   ],
+  productVideos: [
+    {
+      id: 'vid-1',
+      platform: 'shorts',
+      title: 'X-Bacon Especial na Chapa Quente 🔥',
+      subtitle: '2 hambúrgueres suculentos, cheddar derretido no vapor e muito bacon!',
+      handle: '@sabor.cia',
+      likes: 142,
+      productId: 'l2',
+      price: 34.9,
+      thumbImg: IMAGES.lancheBurger,
+      videoSrc: '/assets/aistudio/89154013_1794775977527166_ae9014a5.mp4',
+      externalUrl: 'https://www.youtube.com/@saborecia/shorts',
+    },
+    {
+      id: 'vid-2',
+      platform: 'reels',
+      title: 'Pizza Margherita Saindo do Forno 🍕',
+      subtitle: 'Massa artesanal, mussarela borbulhando, manjericão fresco e azeite.',
+      handle: '@sabor.cia',
+      likes: 98,
+      productId: 'p1',
+      price: 45.9,
+      thumbImg: IMAGES.pizzaArtesanal,
+      videoSrc: '/assets/aistudio/89154013_1794775977527166_ae9014a5.mp4',
+      externalUrl: 'https://www.instagram.com/',
+    },
+    {
+      id: 'vid-3',
+      platform: 'shorts',
+      title: 'Pizza Quatro Queijos Gratinada 🧀',
+      subtitle: 'Mussarela, provolone, gorgonzola e parmesão com borda recheada!',
+      handle: '@sabor.cia',
+      likes: 115,
+      productId: 'p3',
+      price: 52.9,
+      thumbImg: IMAGES.heroSplash,
+      videoSrc: '/assets/aistudio/89154013_1794775977527166_ae9014a5.mp4',
+      externalUrl: 'https://www.youtube.com/@saborecia/shorts',
+    },
+    {
+      id: 'vid-4',
+      platform: 'reels',
+      title: 'X-Burger Clássico no Brioche Selado 🍔',
+      subtitle: 'Hambúrguer artesanal 180g na manteiga com queijo e maionese da casa.',
+      handle: '@sabor.cia',
+      likes: 87,
+      productId: 'l1',
+      price: 28.9,
+      thumbImg: IMAGES.lancheBurger,
+      videoSrc: '/assets/aistudio/89154013_1794775977527166_ae9014a5.mp4',
+      externalUrl: 'https://www.instagram.com/',
+    },
+    {
+      id: 'vid-5',
+      platform: 'shorts',
+      title: 'Petit Gateau com Sorvete Cremoso 🍫',
+      subtitle: 'Bolinho quente de chocolate com recheio vulcanizado e bola de sorvete.',
+      handle: '@sabor.cia',
+      likes: 164,
+      productId: 's3',
+      price: 22.9,
+      thumbImg: IMAGES.sobremesa,
+      videoSrc: '/assets/aistudio/89154013_1794775977527166_ae9014a5.mp4',
+      externalUrl: 'https://www.youtube.com/@saborecia/shorts',
+    },
+    {
+      id: 'vid-6',
+      platform: 'reels',
+      title: 'Bebidas Trincando & Suco Natural 🥤',
+      subtitle: 'Coca-Cola 2L gelada e suco de laranja natural feito na hora!',
+      handle: '@sabor.cia',
+      likes: 73,
+      productId: 'b1',
+      price: 12.9,
+      thumbImg: IMAGES.bebidasCombo,
+      videoSrc: '/assets/aistudio/89154013_1794775977527166_ae9014a5.mp4',
+      externalUrl: 'https://www.instagram.com/',
+    },
+  ] as ProductVideoItem[],
 };

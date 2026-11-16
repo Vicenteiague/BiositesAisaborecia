@@ -19,11 +19,19 @@ import {
   Clock,
   Flame,
   MessageCircle,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  ThumbsUp,
+  Share2,
+  MoreVertical,
 } from 'lucide-react';
 import {
   STORE_CONFIG,
   IMAGES,
   Product,
+  ProductVideoItem,
   PIZZA_SIZES,
   PIZZA_COMPLEMENTS_DEFAULT,
   LANCHE_ADDITIONALS,
@@ -81,6 +89,40 @@ function PixDiamondIcon({ className = 'w-5 h-5' }: { className?: string }) {
       <path d="M12 2L2 12l10 10 10-10L12 2z" />
       <path d="M8.5 8.5l7 7" />
       <path d="M15.5 8.5l-7 7" />
+    </svg>
+  );
+}
+
+function YouTubeShortsIcon({ className = 'w-5 h-5' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M17.77 10.32l-1.2-.5L18 9.06c1.84-.96 2.53-3.23 1.56-5.06s-3.24-2.53-5.07-1.56L6 6.94c-1.29.68-2.07 2.04-2 3.49.07 1.42.93 2.67 2.22 3.25.03.01 1.2.5 1.2.5L6 14.93c-1.83.97-2.53 3.24-1.56 5.07.97 1.83 3.24 2.53 5.07 1.56l8.5-4.5c1.29-.68 2.06-2.04 1.99-3.49-.07-1.42-.94-2.68-2.23-3.25zM10 14.65v-5.3L15 12l-5 2.65z" />
+    </svg>
+  );
+}
+
+function InstagramReelsIcon({ className = 'w-5 h-5' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <path d="M2 8h20" />
+      <path d="M7 2l3 6" />
+      <path d="M14 2l3 6" />
+      <polygon points="10 11 16 14.5 10 18 10 11" fill="currentColor" />
     </svg>
   );
 }
@@ -169,6 +211,38 @@ export default function App() {
 
   // FAQ open states
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+
+  // Shorts & Reels ("Nossos Produtos") Carousel State
+  const [playingVideoId, setPlayingVideoId] = useState<string | null>('vid-1');
+  const [isVideoMuted, setIsVideoMuted] = useState<boolean>(true);
+  const [likedVideos, setLikedVideos] = useState<Record<string, boolean>>({});
+
+  const toggleVideoLike = (videoId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLikedVideos((prev) => ({
+      ...prev,
+      [videoId]: !prev[videoId],
+    }));
+  };
+
+  const handleShareVideo = (video: ProductVideoItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const shareText = `Confira ${video.title} no ${STORE_CONFIG.name}! Peça pelo WhatsApp:`;
+    const waShareUrl = `https://wa.me/?text=${encodeURIComponent(
+      `${shareText} ${window.location.href}`
+    )}`;
+    openExternalLink(waShareUrl);
+  };
+
+  const handleOrderFromVideo = (video: ProductVideoItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const foundProduct = STORE_CONFIG.products.find(
+      (p) => p.id === video.productId
+    );
+    if (foundProduct) {
+      handleProductClick(foundProduct);
+    }
+  };
 
   // Weekly Promo Countdown State
   const [countdown, setCountdown] = useState({
@@ -1052,6 +1126,202 @@ export default function App() {
                 </div>
               </article>
             ))}
+          </div>
+        </section>
+
+        {/* 5.5. GUIA "NOSSOS PRODUTOS" — CARROSSEL DE 6 CARDS COM SHORTS DO YOUTUBE E REELS DO INSTAGRAM */}
+        <section className="py-5 px-4 bg-[#140a05] text-white rounded-[32px] mx-2 my-2 shadow-xl border border-orange-500/20">
+          <div className="px-1">
+            <h2 className="text-[21px] font-extrabold text-white tracking-wide uppercase">
+              Nossos Produtos
+            </h2>
+            <div className="w-14 h-1.5 rounded-full bg-gradient-to-r from-[#d43d11] via-[#f96b1f] to-[#ffc029] mt-1.5 mb-2" />
+            <p className="text-xs text-stone-300 mb-4">
+              Toque nos vídeos em Shorts e Reels para assistir e pedir direto pelo WhatsApp.
+            </p>
+          </div>
+
+          <div className="flex gap-3.5 overflow-x-auto no-scrollbar pb-2">
+            {STORE_CONFIG.productVideos.map((video) => {
+              const isPlaying = playingVideoId === video.id;
+              const isLiked = !!likedVideos[video.id];
+              const displayLikes = video.likes + (isLiked ? 1 : 0);
+
+              return (
+                <article
+                  key={video.id}
+                  onClick={() =>
+                    setPlayingVideoId((prev) =>
+                      prev === video.id ? null : video.id
+                    )
+                  }
+                  className="relative flex-shrink-0 w-[218px] h-[386px] rounded-[24px] overflow-hidden bg-zinc-950 border border-orange-500/45 shadow-lg cursor-pointer select-none group"
+                >
+                  {/* Mídia Vertical 9:16 (Vídeo em Reprodução ou Capa + Vídeo) */}
+                  {isPlaying ? (
+                    <video
+                      src={video.videoSrc}
+                      poster={video.thumbImg}
+                      autoPlay
+                      loop
+                      muted={isVideoMuted}
+                      playsInline
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  ) : (
+                    <SafeImage
+                      src={video.thumbImg}
+                      alt={video.title}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                    />
+                  )}
+
+                  {/* Gradientes de Contraste Topo e Base (Idêntico aos Shorts/Reels das fotos) */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/15 to-black/85" />
+
+                  {/* Barra Superior: Logo Shorts / Reels + Controle de Som + Menu */}
+                  <div className="relative z-10 flex items-center justify-between px-3.5 pt-3.5">
+                    <div className="flex items-center gap-1.5 text-white drop-shadow">
+                      {video.platform === 'shorts' ? (
+                        <>
+                          <YouTubeShortsIcon className="w-5 h-5 text-white" />
+                          <span className="text-sm font-extrabold tracking-tight">
+                            Shorts
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <InstagramReelsIcon className="w-4 h-4 text-white" />
+                          <span className="text-sm font-extrabold tracking-tight">
+                            Reels
+                          </span>
+                        </>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsVideoMuted((prev) => !prev);
+                        }}
+                        aria-label={isVideoMuted ? 'Ativar som' : 'Silenciar'}
+                        className="w-7 h-7 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-xs flex items-center justify-center text-white transition"
+                      >
+                        {isVideoMuted ? (
+                          <VolumeX className="w-4 h-4" />
+                        ) : (
+                          <Volume2 className="w-4 h-4 text-[#ffc029]" />
+                        )}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openExternalLink(video.externalUrl);
+                        }}
+                        aria-label="Abrir vídeo original"
+                        className="w-7 h-7 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-xs flex items-center justify-center text-white transition"
+                      >
+                        <MoreVertical className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Botão Play Central Redondo (Igual às fotos em anexo) */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div
+                      className={`w-14 h-14 rounded-full bg-black/55 border-2 border-white/90 backdrop-blur-xs flex items-center justify-center shadow-xl transition-opacity duration-200 ${
+                        isPlaying
+                          ? 'opacity-0 group-hover:opacity-90'
+                          : 'opacity-100'
+                      }`}
+                    >
+                      {isPlaying ? (
+                        <Pause className="w-6 h-6 text-white fill-white" />
+                      ) : (
+                        <Play className="w-6 h-6 text-white fill-white ml-0.5" />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Coluna Lateral Direita: Curtir + Compartilhar (Como no Shorts/Reels da foto) */}
+                  <div className="absolute right-2.5 bottom-24 z-10 flex flex-col items-center gap-3.5">
+                    <button
+                      type="button"
+                      onClick={(e) => toggleVideoLike(video.id, e)}
+                      className="flex flex-col items-center gap-0.5 text-white drop-shadow hover:scale-105 transition"
+                    >
+                      <div
+                        className={`w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-xs border ${
+                          isLiked
+                            ? 'bg-[#f96b1f] border-[#ffc029] text-white'
+                            : 'bg-black/45 border-white/25 text-white'
+                        }`}
+                      >
+                        <ThumbsUp className="w-4 h-4" />
+                      </div>
+                      <span className="text-[11px] font-bold tabular-nums">
+                        {displayLikes}
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={(e) => handleShareVideo(video, e)}
+                      className="flex flex-col items-center gap-0.5 text-white drop-shadow hover:scale-105 transition"
+                    >
+                      <div className="w-9 h-9 rounded-full bg-black/45 border border-white/25 backdrop-blur-xs flex items-center justify-center">
+                        <Share2 className="w-4 h-4" />
+                      </div>
+                      <span className="text-[10px] font-semibold max-w-[54px] truncate">
+                        Compart...
+                      </span>
+                    </button>
+                  </div>
+
+                  {/* Rodapé Interno do Card: Avatar da Loja + @handle + Título + Botão Pedir */}
+                  <div className="absolute inset-x-0 bottom-0 z-10 p-3.5 space-y-2">
+                    <div className="flex items-center gap-2 pr-10">
+                      <SafeImage
+                        src={IMAGES.logo}
+                        fallbackSrc={IMAGES.lancheBurger}
+                        alt={STORE_CONFIG.name}
+                        className="w-8 h-8 rounded-full object-cover border border-[#ffc029] shrink-0"
+                      />
+                      <div className="min-w-0">
+                        <span className="text-xs font-bold text-white block truncate">
+                          {video.handle}
+                        </span>
+                        <span className="text-[10px] text-[#ffc029] font-semibold block truncate">
+                          {formatBRL(video.price)}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="pr-8">
+                      <h3 className="text-xs font-bold text-white line-clamp-1 leading-snug">
+                        {video.title}
+                      </h3>
+                      <p className="text-[10.5px] text-white/85 line-clamp-2 leading-tight mt-0.5">
+                        {video.subtitle}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={(e) => handleOrderFromVideo(video, e)}
+                      className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-[#f96b1f] to-[#ff9f3d] hover:brightness-110 text-zinc-950 font-extrabold text-[11px] uppercase tracking-wide flex items-center justify-center gap-1.5 shadow-md transition active:scale-95"
+                    >
+                      <ShoppingBag className="w-3.5 h-3.5" />
+                      <span>Pedir • {formatBRL(video.price)}</span>
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
 
