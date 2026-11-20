@@ -36,6 +36,7 @@ import {
   PIZZA_COMPLEMENTS_DEFAULT,
   LANCHE_ADDITIONALS,
 } from './data/storeData';
+import OfertaSaborCia from './components/OfertaSaborCia';
 
 interface SelectedAdditionalItem {
   name: string;
@@ -1128,6 +1129,8 @@ export default function App() {
             ))}
           </div>
         </section>
+
+        <OfertaSaborCia />
 
         {/* 5.5. GUIA "NOSSOS PRODUTOS" — CARROSSEL DE 6 CARDS COM SHORTS DO YOUTUBE E REELS DO INSTAGRAM */}
         <section className="py-5 px-4 bg-[#140a05] text-white rounded-[32px] mx-2 my-2 shadow-xl border border-orange-500/20">
